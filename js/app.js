@@ -11,13 +11,20 @@
   var LOOP_SEC = 30;                 // 24시간을 몇 초에 보여 줄지
   var STEP = 30, MAX_MIN = 600;      // 색 띠 간격(분), 색이 끝나는 시간(분)
   var STAT_CITIES = ['대전', '강릉', '광주', '부산'];
-  var SEA = '#0a1524', LAND = '#1c2738';
-  var FONT = '"IBM Plex Sans KR","Pretendard","Malgun Gothic","Apple SD Gothic Neo",sans-serif';
+  var FONT = '"Pretendard","Malgun Gothic","Apple SD Gothic Neo",sans-serif';
+  // 지도 색: 바꾸고 싶으면 여기와 아래 색 띠(ramp)만 고치면 된다
+  var SEA = '#f3f6fa', LAND = '#e1e7ee';          // 바다, 색을 칠하지 않는 땅
+  var INK = '#16202e', INK2 = '#33404f';          // 지도 위 글자
+  var HALO = 'rgba(255,255,255,.92)';             // 글자 테두리
+  var ISO = 'rgba(255,255,255,.9)';               // 1시간 선
+  var COAST = 'rgba(40,55,80,.38)';               // 해안선
+  var NET = 'rgba(30,42,62,.26)';                 // 전체 고속도로
+  var LINK_CASE = 'rgba(255,255,255,.8)', LINK = 'rgba(22,32,46,.88)';   // 자료가 있는 구간
 
   var thresholds = d3.range(STEP, MAX_MIN + 1, STEP);              // 30, 60, … 600
   var ramp = d3.interpolateRgbBasis([                              // 가까움(밝음) → 멂(어두움)
-    '#fff7c9', '#ffe38a', '#ffc65a', '#ffa447', '#f98043', '#e9604a', '#d0465b',
-    '#b0366d', '#8c2d79', '#692a7c', '#4b2a75', '#352a66', '#272a55']);
+    '#fffbe0', '#fff0ae', '#ffdd7d', '#ffc45f', '#ffa65b', '#fb8862', '#f06d73',
+    '#de5a89', '#c44f9f', '#a24eb1', '#7f53bb', '#6060c2', '#4a6fc4']);
   var colors = d3.range(thresholds.length + 1).map(function (i) { return ramp(i / thresholds.length); });
 
   // ───────────────────────────────────────────── 자료 풀기
@@ -220,9 +227,9 @@
     ctx.textBaseline = 'middle';
     ctx.lineJoin = 'round';
     ctx.lineWidth = 3.5;
-    ctx.strokeStyle = 'rgba(8,15,27,.85)';
+    ctx.strokeStyle = HALO;
     ctx.strokeText(text, x, y);
-    ctx.fillStyle = opt.color || '#fff';
+    ctx.fillStyle = opt.color || INK;
     ctx.fillText(text, x, y);
     return ctx.measureText(text).width;
   }
@@ -252,8 +259,8 @@
       ctx.fillStyle = colors[i + 1];
       ctx.fill('evenodd');
     }
-    ctx.lineWidth = 1.1 / k;
-    ctx.strokeStyle = 'rgba(255,255,255,.62)';
+    ctx.lineWidth = 1.2 / k;
+    ctx.strokeStyle = ISO;
     for (var j = 0; j < polys.length; j++) {            // 1시간마다 흰 선
       if (polys[j].value % 60) continue;
       trace(polys[j]);
@@ -262,18 +269,17 @@
     ctx.restore();
 
     ctx.lineJoin = ctx.lineCap = 'round';
-    ctx.lineWidth = 0.7 / k;
-    ctx.strokeStyle = 'rgba(255,255,255,.22)';
+    ctx.lineWidth = 0.8 / k;
+    ctx.strokeStyle = COAST;
     ctx.stroke(fieldPath);
 
     // 도로망: 전체 고속도로(옅게) + 자료가 있는 구간(진하게)
-    ctx.lineWidth = 1.5 / k; ctx.strokeStyle = 'rgba(8,15,27,.2)'; ctx.stroke(netPath);
-    ctx.lineWidth = 0.7 / k; ctx.strokeStyle = 'rgba(255,255,255,.38)'; ctx.stroke(netPath);
-    ctx.lineWidth = 3.2 / k; ctx.strokeStyle = 'rgba(8,15,27,.55)'; ctx.stroke(linkPath);
-    ctx.lineWidth = 1.3 / k; ctx.strokeStyle = 'rgba(255,255,255,.95)'; ctx.stroke(linkPath);
+    ctx.lineWidth = 0.8 / k; ctx.strokeStyle = NET; ctx.stroke(netPath);
+    ctx.lineWidth = 3.4 / k; ctx.strokeStyle = LINK_CASE; ctx.stroke(linkPath);
+    ctx.lineWidth = 1.4 / k; ctx.strokeStyle = LINK; ctx.stroke(linkPath);
     if (hoverLink >= 0) {
-      ctx.lineWidth = 6 / k; ctx.strokeStyle = 'rgba(8,15,27,.8)'; ctx.stroke(linkPaths[hoverLink]);
-      ctx.lineWidth = 3.4 / k; ctx.strokeStyle = '#fff'; ctx.stroke(linkPaths[hoverLink]);
+      ctx.lineWidth = 7 / k; ctx.strokeStyle = '#fff'; ctx.stroke(linkPaths[hoverLink]);
+      ctx.lineWidth = 3.6 / k; ctx.strokeStyle = INK; ctx.stroke(linkPaths[hoverLink]);
     }
 
     // 여기부터 화면 좌표
@@ -283,9 +289,9 @@
     D.origins.forEach(function (o) {
       var x = o.x * k + tx, y = o.y * k + ty;
       ctx.beginPath(); ctx.arc(x, y, 3.6, 0, 6.2832);
-      ctx.fillStyle = SEA; ctx.fill();
-      ctx.lineWidth = 1.6; ctx.strokeStyle = '#fff'; ctx.stroke();
-      if (zoomed) label(o.name, x + 8, y, { size: 11.5, color: '#fff' });
+      ctx.fillStyle = '#fff'; ctx.fill();
+      ctx.lineWidth = 1.8; ctx.strokeStyle = INK; ctx.stroke();
+      if (zoomed) label(o.name, x + 8, y, { size: 11.5 });
     });
     function free(b) {
       return b[0] > 2 && b[2] < W - 2 && !boxes.some(function (o) { return b[0] < o[2] && b[2] > o[0] && b[1] < o[3] && b[3] > o[1]; });
@@ -295,13 +301,13 @@
     pts.forEach(function (p) { boxes.push([p.x - 5, p.y - 5, p.x + 5, p.y + 5]); });
     pts.forEach(function (p) {
       var name = p.c.name, time = fmt(lerpAt(p.c.T));
-      ctx.font = '600 12.5px ' + FONT;
+      ctx.font = '700 12.5px ' + FONT;
       var wn = ctx.measureText(name + ' ').width, w0 = ctx.measureText(name).width;
       ctx.font = '500 12.5px ' + FONT;
       var wt = ctx.measureText(time).width;
       ctx.beginPath(); ctx.arc(p.x, p.y, 3.2, 0, 6.2832);
-      ctx.fillStyle = '#fff'; ctx.fill();
-      ctx.lineWidth = 1.4; ctx.strokeStyle = 'rgba(8,15,27,.9)'; ctx.stroke();
+      ctx.fillStyle = INK; ctx.fill();
+      ctx.lineWidth = 1.6; ctx.strokeStyle = '#fff'; ctx.stroke();
       // 자리를 차례로 찾아본다: 오른쪽, 왼쪽, 아래, 위. 그래도 겹치면 이름만, 그래도 안 되면 점만.
       var tries = [[wn + wt, true], [w0, false]], done = false;
       for (var a = 0; a < tries.length && !done; a++) {
@@ -311,8 +317,8 @@
         for (var q = 0; q < spots.length && !done; q++) {
           var bx = [spots[q][0] - 2, spots[q][1] - 8, spots[q][0] + tw + 2, spots[q][1] + 8];
           if (!free(bx)) continue;
-          label(name, spots[q][0], spots[q][1], { weight: 600, size: 12.5 });
-          if (tries[a][1]) label(time, spots[q][0] + wn, spots[q][1], { weight: 500, size: 12.5, color: '#f3f5f9' });
+          label(name, spots[q][0], spots[q][1], { weight: 700, size: 12.5 });
+          if (tries[a][1]) label(time, spots[q][0] + wn, spots[q][1], { weight: 500, size: 12.5, color: INK2 });
           boxes.push(bx);
           done = true;
         }
@@ -331,7 +337,7 @@
           var f = (next - prev.v) / (v - prev.v);
           var lx = (prev.x + (wx - prev.x) * f) * k + tx, ly = (prev.y + (wy - prev.y) * f) * k + ty;
           if (free([lx - 22, ly - 8, lx + 22, ly + 8]) && onLand((lx - tx) / k, (ly - ty) / k)) {
-            label(next / 60 + '시간', lx, ly, { size: 11, align: 'center', color: '#fff' });
+            label(next / 60 + '시간', lx, ly, { size: 11, weight: 600, align: 'center', color: INK2 });
             boxes.push([lx - 22, ly - 8, lx + 22, ly + 8]);
           }
           while (next <= v) next += 60;

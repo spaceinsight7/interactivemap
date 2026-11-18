@@ -77,4 +77,5 @@ python tools/build_data.py "<엑셀 파일 경로>" "<roadplus_shapefile 폴더 
 - 엑셀 값이 경로 중 최대값이라, 우회 경로가 합쳐지는 곳(대전IC 앞 등)은 바로 다음 구간보다 시간이 길게 나옵니다.
 - 서울양양선 동홍천~양양 구간 등 엑셀 좌표가 틀린 곳은 SHP 노선 위에 구간 길이대로 다시 놓았습니다.
 - 제주 등 분석 구간에서 110km 넘게 떨어진 섬은 색을 칠하지 않습니다.
-- 글꼴(Noto Serif KR, IBM Plex Sans KR)은 Google Fonts에서 불러옵니다. 인터넷이 안 되면 기본 글꼴로 보입니다.
+- 글꼴(Pretendard)은 jsDelivr CDN에서 불러옵니다. 인터넷이 안 되면 기본 글꼴(맑은 고딕 등)로 보입니다.
+- 지도 색은 `js/app.js` 위쪽의 색 상수와 색 띠(`ramp`), 화면 색은 `css/style.css` 맨 위 `:root`에서 바꿉니다.

@@ -1,13 +1,14 @@
 :root {
-  --sea: #0a1524;
-  --land: #1c2738;
-  --ink: #eef1f6;
-  --ink-2: #b9c2d1;
-  --muted: #8591a6;
-  --rule: rgba(255, 255, 255, .13);
-  --focus: #ffd15c;
-  --serif: "Noto Serif KR", "Nanum Myeongjo", "Batang", serif;
-  --sans: "IBM Plex Sans KR", "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  --sea: #f3f6fa;
+  --land: #e1e7ee;
+  --ink: #16202e;
+  --ink-2: #3b485a;
+  --muted: #6b7789;
+  --rule: rgba(22, 32, 46, .14);
+  --rule-strong: rgba(22, 32, 46, .45);
+  --float: rgba(255, 255, 255, .86);
+  --focus: #2f6fde;
+  --sans: "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -58,7 +59,7 @@ body {
   font: 500 13px/1 var(--sans); cursor: pointer;
 }
 .play svg { fill: currentColor; }
-.play:hover { border-color: rgba(255, 255, 255, .4); }
+.play:hover { border-color: var(--rule-strong); }
 
 .ticker { flex: 1; min-width: 0; cursor: pointer; touch-action: none; user-select: none; padding-top: 4px; }
 .ticks { display: grid; grid-template-columns: repeat(24, 1fr); }
@@ -80,13 +81,13 @@ body {
 /* ───────── 제목 */
 h1 {
   margin: 26px 0 0;
-  font: 400 15px/1.4 var(--sans);
+  font: 500 15px/1.4 var(--sans);
   color: var(--ink-2);
 }
 .hour {
   margin: 2px 0 0 -3px;
-  font: 700 clamp(3.2rem, 5.6vw, 5.2rem)/1.12 var(--serif);
-  letter-spacing: -.02em;
+  font: 800 clamp(3.2rem, 5.6vw, 5.2rem)/1.12 var(--sans);
+  letter-spacing: -.035em;
   font-variant-numeric: tabular-nums;
 }
 .lede { margin: 8px 0 0; max-width: 30em; color: var(--muted); font-size: 14px; }
@@ -105,7 +106,7 @@ h1 {
   position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
   display: grid; grid-template-columns: 10px auto; column-gap: 8px;
   padding: 10px 10px 10px 8px;
-  background: rgba(10, 21, 36, .62); border-radius: 6px;
+  background: var(--float); border-radius: 6px;
   font-size: 11px; color: var(--ink-2); pointer-events: none;
 }
 .legend .cap { grid-column: 1 / -1; margin-bottom: 8px; color: var(--ink); font-weight: 500; }
@@ -115,13 +116,14 @@ h1 {
 .legend .lab span { position: absolute; left: 0; transform: translateY(-50%); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .legend .mark {
   position: absolute; left: 4px; width: 18px; height: 2px; margin-top: -1px;
-  background: #fff; box-shadow: 0 0 0 1px var(--sea); display: none;
+  background: var(--ink); box-shadow: 0 0 0 1px #fff; display: none;
 }
 
 .tip {
   position: absolute; z-index: 3; pointer-events: none;
   min-width: 150px; max-width: 250px; padding: 8px 11px;
-  background: rgba(8, 15, 27, .93); border: 1px solid var(--rule); border-radius: 6px;
+  background: rgba(255, 255, 255, .97); border: 1px solid var(--rule); border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(22, 32, 46, .12);
   font-size: 12.5px; line-height: 1.5; color: var(--ink-2);
 }
 .tip b { display: block; color: var(--ink); font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
@@ -130,9 +132,9 @@ h1 {
 .reset {
   position: absolute; right: 16px; top: 16px;
   height: 30px; padding: 0 12px; border: 1px solid var(--rule); border-radius: 15px;
-  background: rgba(10, 21, 36, .8); color: var(--ink); font: 500 12.5px/1 var(--sans); cursor: pointer;
+  background: var(--float); color: var(--ink); font: 500 12.5px/1 var(--sans); cursor: pointer;
 }
-.reset:hover { border-color: rgba(255, 255, 255, .4); }
+.reset:hover { border-color: var(--rule-strong); }
 
 .hint { position: absolute; right: 16px; bottom: 10px; margin: 0; font-size: 11.5px; color: var(--muted); pointer-events: none; }
 
