@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>시간대별 고속도로 소요시간 지도 | 특송기간 지방방향</title>
+<meta name="description" content="특송기간 지방방향 고속도로 DSRC 통행시간 자료로 만든 지도입니다. 수도권 요금소에서 전국 각지까지 걸리는 시간이 0시부터 23시까지 어떻게 달라지는지 보여 줍니다.">
+<meta name="theme-color" content="#0a1524">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a1524'/%3E%3Ccircle cx='16' cy='16' r='11' fill='%23d0465b'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23ffa447'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23fff7c9'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main class="app">
+
+  <header class="head">
+    <div class="timebar">
+      <button type="button" class="play" id="play" aria-pressed="false">
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path id="playIcon" d="M4 2.5v11l9-5.5z"/></svg>
+        <span id="playText">재생</span>
+      </button>
+      <div class="ticker" id="ticker" role="slider" tabindex="0"
+           aria-label="시간대" aria-valuemin="0" aria-valuemax="23" aria-valuenow="0">
+        <div class="ticks" id="ticks"></div>
+        <div class="track"><div class="fill" id="fill"></div></div>
+      </div>
+    </div>
+    <h1>특송기간 지방방향 고속도로 소요시간</h1>
+    <p class="hour" id="hour">오전 0시</p>
+    <p class="lede">이 시간대 속도로 달릴 때 수도권 요금소에서 걸리는 시간입니다.</p>
+  </header>
+
+  <section class="mapwrap" id="mapwrap" aria-label="소요시간 지도">
+    <canvas id="map"></canvas>
+    <div class="legend" id="legend" aria-hidden="true"></div>
+    <div class="tip" id="tip" hidden></div>
+    <button type="button" class="reset" id="reset" hidden>처음 위치로</button>
+    <p class="hint">끌어서 이동, 휠이나 두 손가락으로 확대</p>
+  </section>
+
+  <footer class="foot">
+    <table class="stats" id="stats">
+      <thead>
+        <tr><th scope="col">도착지</th><th scope="col">소요시간</th><th scope="col">가장 빠른 시간대와 차이</th><th scope="col">하루 변화</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <details class="notes">
+      <summary>자료와 계산 방법</summary>
+      <ul id="notes"></ul>
+    </details>
+  </footer>
+
+</main>
+
+<p class="nodata-msg">data/data.js 또는 vendor/d3.min.js 를 불러오지 못했습니다. 두 파일이 index.html 과 같은 저장소에 올라가 있는지 확인해 주세요.</p>
+
+<script src="vendor/d3.min.js"></script>
+<script src="data/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
